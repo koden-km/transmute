@@ -51,6 +51,10 @@ final class StateMachine implements ArrayAccess
         // assert that all states have associated logic, unless they are terminal states
     }
 
+    /**
+     * @param mixed $currentState The current state of the object.
+     * @param mixed $context      The object having state updated.
+     */
     public function update($currentState, $context)
     {
         assert($this->contextType === null || $object instanceof $this->contextType);
@@ -75,16 +79,27 @@ final class StateMachine implements ArrayAccess
         }
     }
 
+    /**
+     * @param string $name The name of the transition to use.
+     */
     public function transition(string $name)
     {
         $this->nextTransition = $name;
     }
 
-    public function __call($name, array $arguments)
+    /**
+     * @param string $name      The name of the transition to use.
+     * @param array  $arguments The arguments (unused).
+     */
+    public function __call(string $name, array $arguments)
     {
         $this->nextTransition = $name;
     }
 
+    /**
+     * @param mixed  $currentState   The current state of the object.
+     * @param string $transitionName The name of the transition to use.
+     */
     private function findTargetState($currentState, string $transitionName)
     {
         if ($this->transitions->contains[$currentState])) {
