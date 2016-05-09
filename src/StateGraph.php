@@ -5,67 +5,81 @@ declare (strict_types = 1); // @codeCoverageIgnore
 namespace Icecave\Transmute;
 use SplObjectStorage;
 
-class StateGraph implements ArrayAccess
+final class StateGraph
 {
-    public static function create(): self
+    public function __construct(SplObjectStorage $graph)
     {
-        return new self();
+        $this->graph = $graph;
+// $this->currentState = StateGraphWildcard::instance();
     }
 
-    public function offsetGet($offset)
+    /**
+     * @param mixed $currentState
+     *
+     * @return bool
+     */
+    public function contains($currentState): bool
     {
-        $this->currentState = $offset;
-
-        return $this;
+        return $this->graph->contains($currentState);
     }
 
-    public function offsetExists($offset)
+// public function isInitialState(): bool
+// {
+//     return $currentState === StateGraphWildcard::instance();
+// }
+
+    /**
+     * @param mixed $currentState
+     *
+     * @return bool
+     */
+    public function isInitialState($currentState): bool
     {
-        assert(false, 'not implemented'); // @codeCoverageIgnore
+        assert(isset($this->graph[$currentState]));
+
+        return $currentState === StateGraphWildcard::instance();
     }
 
-    public function offsetSet($offset, $value)
+// public function isTerminalState(): bool
+// {
+//     return empty($this->graph[$this->currentState]);
+// }
+
+// public function isTerminalState(): bool
+    /**
+     * @param mixed $currentState
+     *
+     * @return bool
+     */
+    public function isTerminalState($currentState): bool
     {
-        assert(false, 'not implemented'); // @codeCoverageIgnore
+        assert(isset($this->graph[$currentState]));
+
+        return empty($this->graph[$currentState]);
     }
 
-    public function offsetUnset($offset)
+// /**
+//  * @param string $transitionName The name of the available transition.
+//  *
+//  * @return mixed The state after transition.
+//  */
+// public function findStateByTransition(string $transitionName)
+// {
+//     assert(isset($this->graph[$this->currentState][$name]));
+
+//     return $this->graph[$this->currentState][$transitionName];
+// }
+
+    /**
+     * @param string $transitionName The name of the available transition.
+     *
+     * @return mixed The state after transition.
+     */
+    public function findStateByTransition($currentState, string $transitionName)
     {
-        assert(false, 'not implemented'); // @codeCoverageIgnore
-    }
+        assert(isset($this->graph[$currentState][$transitionName]));
 
-    public function __call(string $name, array $arguments)
-    {
-        assert(!empty($arguments));
-
-        if ($this->graph->contains($this->currentState)) {
-            $transitions = $this->graph[$this->currentState];
-        } else {
-            $transitions = [];
-        }
-
-        assert(!isset($transitions[$name]));
-
-        $transitions[$name] = $arguments[0];
-        $this->transitions[$this->currentState] = $transitions;
-
-        return $this;
-    }
-
-    public function buildGraph()
-    {
-        try {
-            return $this->graph;
-        } finally {
-            $this->graph = new SplObjectStorage();
-            $this->currentState = StateGraphWildcard::instance();
-        }
-    }
-
-    private function __construct()
-    {
-        $this->graph = new SplObjectStorage();
-        $this->currentState = StateGraphWildcard::instance();
+        return $this->graph[$currentState][$transitionName];
     }
 
     /**
@@ -73,8 +87,8 @@ class StateGraph implements ArrayAccess
      */
     private $graph;
 
-    /**
-     * @var mixed|null The current transition state, or null if none.
-     */
-    private $currentState;
+    // /**
+    //  * @var mixed|null The current transition state, or null if none.
+    //  */
+    // private $currentState;
 }

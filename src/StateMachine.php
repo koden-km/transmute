@@ -6,15 +6,25 @@ namespace Icecave\Transmute;
 
 use ArrayAccess;
 use SplObjectStorage;
-use InvalidArgumentException;
 
 final class StateMachine implements ArrayAccess
 {
+
+// /**
+//  * @param SplObjectStorage<object, array<string, object>> $graph       The graph of state transitions.
+//  * @param string|null                                     $contextType The type of data object accepted by the state logic implementation.
+//  */
+// public function __construct(StateGraph $graph, string $contextType = null)
+// {
+//     $this->graph = $graph;
+//     $this->contextType = $contextType;
+// }
+
     /**
-     * @param SplObjectStorage<object, array<string, object>> $graph       The graph of state transitions.
-     * @param string|null                                     $contextType The type of data object accepted by the state logic implementation.
+     * @param StateGraph  $graph       The graph of state transitions.
+     * @param string|null $contextType The type of data object accepted by the state logic implementation.
      */
-    public function __construct(SplObjectStorage $graph, string $contextType = null)
+    public function __construct(StateGraph $graph, string $contextType = null)
     {
         $this->graph = $graph;
         $this->contextType = $contextType;
@@ -46,6 +56,7 @@ final class StateMachine implements ArrayAccess
 
     public function validate(...$states)
     {
+        // TODO
         // assert(all states are mentioned either as intiial or target state - wildcard counts as mentioned)
         // assert(no states are mentioned that are not in $states)
         // assert that all states have associated logic, unless they are terminal states
@@ -60,8 +71,14 @@ final class StateMachine implements ArrayAccess
         assert($this->contextType === null || $object instanceof $this->contextType);
         assert($this->contextType !== null || $context === null);
 
+        $transitioner = new Transitioner($this);
+
         while (true) {
-            $this->logic[$currentState]->update($this, $context);
+            // if ($this->graph->isTerminalState($currentState)) {
+            //     break;
+            // }
+
+            $this->logic[$currentState]->update($transitioner, $context);
 
             if ($this->nextTransition === null) {
                 break;
@@ -73,8 +90,11 @@ final class StateMachine implements ArrayAccess
                 $this->nextTransition = null;
             }
 
-            $this->logic[$currentState]->leave($this, $nextState, $context);
-            $this->logic[$nextState]->enter($this, $currentState, $context);
+            // if (!$this->graph->isInitialState($currentState)) {
+            // }
+
+            $this->logic[$currentState]->leave($transitioner, $nextState, $context);
+            $this->logic[$nextState]->enter($transitioner, $currentState, $context);
             $currentState = $nextState;
         }
     }
@@ -87,40 +107,61 @@ final class StateMachine implements ArrayAccess
         $this->nextTransition = $name;
     }
 
-    /**
-     * @param string $name      The name of the transition to use.
-     * @param array  $arguments The arguments (unused).
-     */
-    public function __call(string $name, array $arguments)
-    {
-        $this->nextTransition = $name;
-    }
+// /**
+//  * @param string $name      The name of the transition to use.
+//  * @param array  $arguments The arguments (unused).
+//  */
+// public function __call(string $name, array $arguments)
+// {
+//     $this->nextTransition = $name;
+// }
 
     /**
      * @param mixed  $currentState   The current state of the object.
      * @param string $transitionName The name of the transition to use.
+     *
+     * @return mixed
      */
     private function findTargetState($currentState, string $transitionName)
     {
-        if ($this->transitions->contains[$currentState])) {
-            $transitions = $this->transitions[$currentState];
-            $state = $transitions[$transitionName] ?? null;
+        // if ($this->transitions->contains[$currentState]) {
+        //     $transitions = $this->transitions[$currentState];
+        //     $state = $transitions[$transitionName] ?? null;
 
-            if ($state !== null) {
-                return $state;
-            }
-        }
+        //     if ($state !== null) {
+        //         return $state;
+        //     }
+        // }
 
-        $currentState = StateGraphWildcard::instance();
-        assert($this->transitions->contains[$currentState]));
-        $transitions = $this->transitions[$currentState];
-        assert($transitions[$transitionName] ?? false);
+        // $currentState = StateGraphWildcard::instance();
+        // assert($this->transitions->contains[$currentState]);
+        // $transitions = $this->transitions[$currentState];
+        // assert($transitions[$transitionName] ?? false);
 
-        return $transitions[$transitionName];
+        // return $transitions[$transitionName];
+
+
+
+
+
+
+        // if ($this->graph->contains($currentState)) {
+        // }
+
+
+        return $this->graph->findStateByTransition(
+            $currentState,
+            $transitionName
+        );
     }
 
+// /**
+//  * @var SplObjectStorage<object, array<string, object>> The state graph to use.
+//  */
+// private $graph;
+
     /**
-     * @var SplObjectStorage<object, array<string, object>> The state graph to use.
+     * @var StateGraph The state graph to use.
      */
     private $graph;
 

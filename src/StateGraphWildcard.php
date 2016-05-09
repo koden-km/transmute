@@ -20,7 +20,7 @@ final class StateGraphWildcard
     }
 
     /**
-     * @var self Singletone.
+     * @var self Singleton.
      */
     private static $instance;
 }

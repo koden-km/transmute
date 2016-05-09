@@ -12,13 +12,18 @@
             "name": "Kevin Millar",
             "email": "koden.km@gmail.com",
             "homepage": "https://github.com/koden-km"
+        },
+        {
+            "name": "James Harris",
+            "email": "james.harris@icecave.com.au",
+            "homepage": "https://github.com/jmalloc"
         }
     ],
     "require": {
-        "php": "^7",
-		"eloquent/enumeration": "^5"
+        "php": "^7"
     },
     "require-dev": {
+		"eloquent/enumeration": "^5",
 		"eloquent/phony": "^0.9",
 		"fabpot/php-cs-fixer": "^1",
 		"phpunit/phpunit": "^5"

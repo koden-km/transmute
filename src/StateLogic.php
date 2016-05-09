@@ -9,26 +9,26 @@ interface StateLogic
     /**
      * The update logic to be done during an update.
      *
-     * @param StateMachine $machine The state machine.
-     * @param mixed        $context The object having state updated.
+     * @param Transitioner $transitioner The state transitioner.
+     * @param mixed        $context      The object having state updated.
      */
-    public function update(StateMachine $machine, $context);
+    public function update(Transitioner $transitioner, $context);
 
     /**
      * Any logic to be performed when entering this state.
      *
-     * @param StateMachine $machine       The state machine.
+     * @param Transitioner $transitioner  The state transitioner.
      * @param mixed        $previousState The previous state transitioned from.
      * @param mixed        $context       The object being state transitioned.
      */
-    public function enter(StateMachine $machine, $previousState, $context);
+    public function enter(Transitioner $transitioner, $previousState, $context);
 
     /**
      * Any logic to be performed when leaving this state.
      *
-     * @param StateMachine $machine   The state machine.
-     * @param mixed        $nextState The next state transitioning to.
-     * @param mixed        $context   The object being state transitioned.
+     * @param Transitioner $transitioner The state transitioner.
+     * @param mixed        $nextState    The next state transitioning to.
+     * @param mixed        $context      The object being state transitioned.
      */
-    public function leave(StateMachine $machine, $nextState, $context);
+    public function leave(Transitioner $transitioner, $nextState, $context);
 }
