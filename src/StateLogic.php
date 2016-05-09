@@ -7,29 +7,28 @@ namespace Icecave\Transmute;
 interface StateLogic
 {
     /**
-     * The update logic to be done during an update. Updates may be tick based
-     * or event based.
+     * The update logic to be done during an update.
      *
-     * @param StateExecutor $executor The state machine executor.
+     * @param StateMachine $machine The state machine.
      * @param mixed         $context  The object having state updated.
      */
-    public function update(StateExecutor $executor, $context);
+    public function update(StateMachine $machine, $context);
 
     /**
      * Any logic to be performed when entering this state.
      *
-     * @param StateExecutor $executor      The state machine executor.
+     * @param StateMachine $machine      The state machine.
      * @param mixed         $previousState The previous state transitioned from.
      * @param mixed         $context       The object being state transitioned.
      */
-    public function enter(StateExecutor $executor, $previousState, $context);
+    public function enter(StateMachine $machine, $previousState, $context);
 
     /**
      * Any logic to be performed when leaving this state.
      *
-     * @param StateExecutor $executor  The state machine executor.
+     * @param StateMachine $machine  The state machine.
      * @param mixed         $nextState The next state transitioning to.
      * @param mixed         $context   The object being state transitioned.
      */
-    public function leave(StateExecutor $executor, $nextState, $game);
+    public function leave(StateMachine $machine, $nextState, $game);
 }
