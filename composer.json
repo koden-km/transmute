@@ -1,0 +1,28 @@
+{
+    "name": "icecave/transmute",
+    "description": "A state machine library.",
+    "keywords": [
+        "state",
+        "machine"
+    ],
+    "homepage": "https://github.com/IcecaveStudios/transmute",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kevin Millar",
+            "email": "koden.km@gmail.com",
+            "homepage": "https://github.com/koden-km"
+        }
+    ],
+    "require": {
+        "php": "^7",
+		"eloquent/enumeration": "^5"
+    },
+    "require-dev": {
+		"eloquent/phony": "^0.9",
+		"fabpot/php-cs-fixer": "^1",
+		"phpunit/phpunit": "^5"
+    },
+    "autoload": { "psr-4": { "Icecave\\Transmute\\": "src" } },
+    "autoload-dev": { "psr-4": { "Icecave\\Transmute\\": "test/src" } }
+}
