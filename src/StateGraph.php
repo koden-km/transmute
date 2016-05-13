@@ -3,14 +3,17 @@
 declare (strict_types = 1); // @codeCoverageIgnore
 
 namespace Icecave\Transmute;
+
 use SplObjectStorage;
 
 final class StateGraph
 {
+    /**
+     * @param SplObjectStorage $graph
+     */
     public function __construct(SplObjectStorage $graph)
     {
         $this->graph = $graph;
-// $this->currentState = StateGraphWildcard::instance();
     }
 
     /**
@@ -22,11 +25,6 @@ final class StateGraph
     {
         return $this->graph->contains($currentState);
     }
-
-// public function isInitialState(): bool
-// {
-//     return $currentState === StateGraphWildcard::instance();
-// }
 
     /**
      * @param mixed $currentState
@@ -40,12 +38,6 @@ final class StateGraph
         return $currentState === StateGraphWildcard::instance();
     }
 
-// public function isTerminalState(): bool
-// {
-//     return empty($this->graph[$this->currentState]);
-// }
-
-// public function isTerminalState(): bool
     /**
      * @param mixed $currentState
      *
@@ -57,18 +49,6 @@ final class StateGraph
 
         return empty($this->graph[$currentState]);
     }
-
-// /**
-//  * @param string $transitionName The name of the available transition.
-//  *
-//  * @return mixed The state after transition.
-//  */
-// public function findStateByTransition(string $transitionName)
-// {
-//     assert(isset($this->graph[$this->currentState][$name]));
-
-//     return $this->graph[$this->currentState][$transitionName];
-// }
 
     /**
      * @param string $transitionName The name of the available transition.
@@ -83,12 +63,7 @@ final class StateGraph
     }
 
     /**
-     * @var SplObjectStorage<object, array<string, object>> The state graph to use.
+     * @var SplObjectStorage<object, array<string, object>> The state graph structure.
      */
     private $graph;
-
-    // /**
-    //  * @var mixed|null The current transition state, or null if none.
-    //  */
-    // private $currentState;
 }

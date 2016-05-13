@@ -11,6 +11,12 @@ class StateMachineTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
+        // TODO: Ensure this system works with types: int, string and eloquent enumeration.
+
+        $this->subject = new StateMachine(
+            GameStatus::graph(),
+            GameStatus::class
+        );
     }
 
     public function testPlaceholder()

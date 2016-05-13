@@ -11,17 +11,26 @@ final class Transitioner
      */
     public $machine;
 
+    /**
+     * @var string|null The name of the next transition to perform, if any.
+     */
+    public $nextTransition;
+
+    /**
+     * @param StateMachine $machine The state machine in use.
+     */
     public function __construct(StateMachine $machine)
     {
         $this->machine = $machine;
+        $this->nextTransition = null;
     }
 
     /**
-     * @param string $name      The name of the transition to use.
+     * @param string $name      The name of the next transition to perform.
      * @param array  $arguments The arguments (unused).
      */
     public function __call(string $name, array $arguments)
     {
-        $this->machine->transition($name);
+        $this->nextTransition = $name;
     }
 }

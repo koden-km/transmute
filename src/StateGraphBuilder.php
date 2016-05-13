@@ -3,15 +3,27 @@
 declare (strict_types = 1); // @codeCoverageIgnore
 
 namespace Icecave\Transmute;
+
+use ArrayAccess;
 use SplObjectStorage;
 
 final class StateGraphBuilder implements ArrayAccess
 {
+    /**
+     * Create the state graph builder.
+     *
+     * @return StateGraphBuilder
+     */
     public static function create(): self
     {
         return new self();
     }
 
+    /**
+     * @param mixed $offset A state to setup transitions for.
+     *
+     * @return StateGraphBuilder
+     */
     public function offsetGet($offset)
     {
         $this->currentState = $offset;
@@ -34,6 +46,14 @@ final class StateGraphBuilder implements ArrayAccess
         assert(false, 'not implemented'); // @codeCoverageIgnore
     }
 
+    /**
+     * Setup a state transition that can be performed.
+     *
+     * @param string       $name      The name of the transition that can be performed.
+     * @param array<mixed> $arguments The first argument is the state after transition, any remaining arguments are ignored.
+     *
+     * @return StateGraphBuilder
+     */
     public function __call(string $name, array $arguments)
     {
         assert(!empty($arguments));
@@ -52,6 +72,11 @@ final class StateGraphBuilder implements ArrayAccess
         return $this;
     }
 
+    /**
+     * Build a StateGraph from the current builder graph.
+     *
+     * @return StateGraph
+     */
     public function build(): StateGraph
     {
         try {
@@ -62,6 +87,11 @@ final class StateGraphBuilder implements ArrayAccess
         }
     }
 
+    /**
+     * Private constructor.
+     *
+     * Use the create() factory method.
+     */
     private function __construct()
     {
         $this->graph = new SplObjectStorage();
@@ -74,7 +104,7 @@ final class StateGraphBuilder implements ArrayAccess
     private $graph;
 
     /**
-     * @var mixed|null The current transition state, or null if none.
+     * @var mixed The current transition state.
      */
     private $currentState;
 }

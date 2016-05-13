@@ -9,17 +9,6 @@ use SplObjectStorage;
 
 final class StateMachine implements ArrayAccess
 {
-
-// /**
-//  * @param SplObjectStorage<object, array<string, object>> $graph       The graph of state transitions.
-//  * @param string|null                                     $contextType The type of data object accepted by the state logic implementation.
-//  */
-// public function __construct(StateGraph $graph, string $contextType = null)
-// {
-//     $this->graph = $graph;
-//     $this->contextType = $contextType;
-// }
-
     /**
      * @param StateGraph  $graph       The graph of state transitions.
      * @param string|null $contextType The type of data object accepted by the state logic implementation.
@@ -42,9 +31,15 @@ final class StateMachine implements ArrayAccess
         return $this->logic->contains($offset);
     }
 
+    /**
+     * Bind a logic object to a given state.
+     *
+     * @param mixed $offset The state to bind to.
+     * @param mixed $value  The logic object to bind.
+     */
     public function offsetSet($offset, $value)
     {
-        assert($this->graph->contains($offset));
+        assert($this->logic->contains($offset));
 
         $this->logic[$offset] = $value;
     }
@@ -74,23 +69,28 @@ final class StateMachine implements ArrayAccess
         $transitioner = new Transitioner($this);
 
         while (true) {
-            // if ($this->graph->isTerminalState($currentState)) {
-            //     break;
-            // }
+            if ($this->graph->isTerminalState($currentState)) {
+                break;
+            }
 
             $this->logic[$currentState]->update($transitioner, $context);
 
-            if ($this->nextTransition === null) {
+            if ($transitioner->nextTransition === null) {
                 break;
             }
 
             try {
-                $nextState = $this->findTargetState($currentState, $this->nextTransition);
+                $nextState = $this->graph->findStateByTransition(
+                    $currentState,
+                    $transitionName
+                );
             } finally {
-                $this->nextTransition = null;
+                $transitioner->nextTransition = null;
             }
 
+            // TODO: what to do on initial state?
             // if (!$this->graph->isInitialState($currentState)) {
+            //     // anything to do or not do?
             // }
 
             $this->logic[$currentState]->leave($transitioner, $nextState, $context);
@@ -100,68 +100,7 @@ final class StateMachine implements ArrayAccess
     }
 
     /**
-     * @param string $name The name of the transition to use.
-     */
-    public function transition(string $name)
-    {
-        $this->nextTransition = $name;
-    }
-
-// /**
-//  * @param string $name      The name of the transition to use.
-//  * @param array  $arguments The arguments (unused).
-//  */
-// public function __call(string $name, array $arguments)
-// {
-//     $this->nextTransition = $name;
-// }
-
-    /**
-     * @param mixed  $currentState   The current state of the object.
-     * @param string $transitionName The name of the transition to use.
-     *
-     * @return mixed
-     */
-    private function findTargetState($currentState, string $transitionName)
-    {
-        // if ($this->transitions->contains[$currentState]) {
-        //     $transitions = $this->transitions[$currentState];
-        //     $state = $transitions[$transitionName] ?? null;
-
-        //     if ($state !== null) {
-        //         return $state;
-        //     }
-        // }
-
-        // $currentState = StateGraphWildcard::instance();
-        // assert($this->transitions->contains[$currentState]);
-        // $transitions = $this->transitions[$currentState];
-        // assert($transitions[$transitionName] ?? false);
-
-        // return $transitions[$transitionName];
-
-
-
-
-
-
-        // if ($this->graph->contains($currentState)) {
-        // }
-
-
-        return $this->graph->findStateByTransition(
-            $currentState,
-            $transitionName
-        );
-    }
-
-// /**
-//  * @var SplObjectStorage<object, array<string, object>> The state graph to use.
-//  */
-// private $graph;
-
-    /**
-     * @var StateGraph The state graph to use.
+     * @var StateGraph The graph of state transitions.
      */
     private $graph;
 
@@ -174,9 +113,4 @@ final class StateMachine implements ArrayAccess
      * @var string|null The type of data object accepted by the state logic implementation.
      */
     private $contextType;
-
-    /**
-     * @var string|null The name of the next transition to perform, if any.
-     */
-    private $nextTransition;
 }
