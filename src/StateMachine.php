@@ -16,6 +16,7 @@ final class StateMachine implements ArrayAccess
     public function __construct(StateGraph $graph, string $contextType = null)
     {
         $this->graph = $graph;
+        $this->logic = new SplObjectStorage();  // TODO: change this to use the TransitionMap?
         $this->contextType = $contextType;
     }
 

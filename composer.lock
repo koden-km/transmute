@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f9856f3f293ba4bf16ba4af7b76a4807",
-    "content-hash": "170d0bb6a8c216f5b4124f7aba35f3a5",
+    "hash": "1481ad18f77073b01185fff721045408",
+    "content-hash": "4803081ef9b07c7d4ccf9d4aff9fe6fc",
     "packages": [],
     "packages-dev": [
         {
@@ -112,78 +112,6 @@
                 "type"
             ],
             "time": "2015-11-03 22:21:38"
-        },
-        {
-            "name": "eloquent/phony",
-            "version": "0.9.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/eloquent/phony.git",
-                "reference": "5c7e675c95f0573356c71eb33ea98eb3d0201aaa"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/eloquent/phony/zipball/5c7e675c95f0573356c71eb33ea98eb3d0201aaa",
-                "reference": "5c7e675c95f0573356c71eb33ea98eb3d0201aaa",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3"
-            },
-            "require-dev": {
-                "athletic/athletic": "^0.1",
-                "counterpart/counterpart": "^1",
-                "danielstjules/pho": "^1",
-                "fabpot/php-cs-fixer": "^1",
-                "hamcrest/hamcrest-php": "^2",
-                "icecave/isolator": "^3",
-                "icecave/woodhouse": "dev-develop",
-                "mockery/mockery": "^0.9",
-                "peridot-php/leo": "^1",
-                "peridot-php/peridot": "^1",
-                "phake/phake": "^2",
-                "phpspec/prophecy": "^1",
-                "phpunit/php-code-coverage": "^2",
-                "phpunit/phpunit": "^4",
-                "simpletest/simpletest": "^1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Eloquent\\Phony\\": "src"
-                },
-                "files": [
-                    "src/functions.php",
-                    "src/Pho/functions.php",
-                    "src/Phpunit/functions.php",
-                    "src/Simpletest/functions.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Erin Millard",
-                    "email": "ezzatron@gmail.com",
-                    "homepage": "http://ezzatron.com/"
-                }
-            ],
-            "description": "Mocks, stubs, and spies for PHP.",
-            "homepage": "https://github.com/eloquent/phony",
-            "keywords": [
-                "Double",
-                "Dummy",
-                "fake",
-                "mock",
-                "mocking",
-                "spy",
-                "stub",
-                "stubbing",
-                "test"
-            ],
-            "time": "2016-04-27 07:21:14"
         },
         {
             "name": "fabpot/php-cs-fixer",

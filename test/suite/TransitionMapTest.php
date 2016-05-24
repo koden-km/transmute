@@ -4,19 +4,16 @@ declare (strict_types = 1); // @codeCoverageIgnore
 
 namespace Icecave\Transmute;
 
-// use Eloquent\Phony\Phpunit\Phony;
 use PHPUnit_Framework_TestCase;
 
-class StateMachineTest extends PHPUnit_Framework_TestCase
+class TransitionMapTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
         // TODO: Ensure this system works with types: int, string and eloquent enumeration.
 
-        // $this->subject = new StateMachine(
-        //     GameStatus::graph(),
-        //     GameStatus::class
-        // );
+        // $this->arrayMap = TransitionMap::createArrayMap();
+        // $this->objectMap = TransitionMap::createObjectMap();
     }
 
     public function testPlaceholder()

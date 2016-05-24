@@ -24,7 +24,6 @@
     },
     "require-dev": {
 		"eloquent/enumeration": "^5",
-		"eloquent/phony": "^0.9",
 		"fabpot/php-cs-fixer": "^1",
 		"phpunit/phpunit": "^5"
     },

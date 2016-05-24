@@ -4,14 +4,12 @@ declare (strict_types = 1); // @codeCoverageIgnore
 
 namespace Icecave\Transmute;
 
-use SplObjectStorage;
-
 final class StateGraph
 {
     /**
-     * @param SplObjectStorage $graph
+     * @param TransitionMap $graph
      */
-    public function __construct(SplObjectStorage $graph)
+    public function __construct(TransitionMap $graph)
     {
         $this->graph = $graph;
     }
@@ -63,7 +61,7 @@ final class StateGraph
     }
 
     /**
-     * @var SplObjectStorage<object, array<string, object>> The state graph structure.
+     * @var TransitionMap The state graph structure.
      */
     private $graph;
 }

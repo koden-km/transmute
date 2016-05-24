@@ -5,18 +5,19 @@ declare (strict_types = 1); // @codeCoverageIgnore
 namespace Icecave\Transmute;
 
 use ArrayAccess;
-use SplObjectStorage;
 
 final class StateGraphBuilder implements ArrayAccess
 {
     /**
      * Create the state graph builder.
      *
+     * @param bool $useObjectKeys True to use object keys for states.
+     *
      * @return StateGraphBuilder
      */
-    public static function create(): self
+    public static function create(bool $useObjectKeys): self
     {
-        return new self();
+        return new self($useObjectKeys);
     }
 
     /**
@@ -67,7 +68,7 @@ final class StateGraphBuilder implements ArrayAccess
         assert(!isset($transitions[$name]));
 
         $transitions[$name] = $arguments[0];
-        $this->transitions[$this->currentState] = $transitions;
+        $this->graph[$this->currentState] = $transitions;
 
         return $this;
     }
@@ -82,8 +83,7 @@ final class StateGraphBuilder implements ArrayAccess
         try {
             return new StateGraph($this->graph);
         } finally {
-            $this->graph = new SplObjectStorage();
-            $this->currentState = StateGraphWildcard::instance();
+            $this->reset($this->graph->isUsingObjectKeys());
         }
     }
 
@@ -91,15 +91,31 @@ final class StateGraphBuilder implements ArrayAccess
      * Private constructor.
      *
      * Use the create() factory method.
+     *
+     * @param bool $useObjectKeys True to use object keys for states.
      */
-    private function __construct()
+    private function __construct(bool $useObjectKeys)
     {
-        $this->graph = new SplObjectStorage();
+        $this->reset($useObjectKeys);
+    }
+
+    /**
+     * Reset the graph builder.
+     *
+     * @param bool $useObjectKeys True to use object keys for states.
+     */
+    private function reset(bool $useObjectKeys)
+    {
+        if ($useObjectKeys) {
+            $this->graph = TransitionMap::createObjectMap();
+        } else {
+            $this->graph = TransitionMap::createArrayMap();
+        }
         $this->currentState = StateGraphWildcard::instance();
     }
 
     /**
-     * @var SplObjectStorage<object, array<string, object>> The state graph to use.
+     * @var TransitionMap The state graph being created.
      */
     private $graph;
 

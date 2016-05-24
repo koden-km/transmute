@@ -6,6 +6,11 @@ namespace Icecave\Transmute;
 
 final class StateGraphWildcard
 {
+    /**
+     * Get the singleton instance.
+     *
+     * @return StateGraphWildcard
+     */
     public static function instance(): self
     {
         if (null === self::$instance) {
@@ -15,6 +20,11 @@ final class StateGraphWildcard
         return self::$instance;
     }
 
+    /**
+     * Private constructor.
+     *
+     * Use the instance() factory method.
+     */
     private function __construct()
     {
     }

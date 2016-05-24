@@ -10,6 +10,7 @@ class GameStatus extends AbstractEnumeration
 {
     const CREATED     = 'created';
     const PENDING     = 'pending';
+    const REGISTERING = 'registering';
     const LIVE        = 'live';
     const FINISHING   = 'finishing';
     const FINISHED    = 'finished';
@@ -18,7 +19,7 @@ class GameStatus extends AbstractEnumeration
 
     public static function graph(): StateGraph
     {
-        return StateGraphBuilder::create(self::class)
+        return StateGraphBuilder::create(true)
             ->cancel(self::CANCELLING())
             ->delete(self::DELETED())
 
