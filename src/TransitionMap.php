@@ -131,7 +131,7 @@ final class TransitionMap implements ArrayAccess
     }
 
     /**
-     * @var map<mixed, array<string, mixed>> The map of key to array of name based transitions.
+     * @var map<mixed, array<string, mixed>> The map of state key to array of name based transitions.
      */
     private $map;
 

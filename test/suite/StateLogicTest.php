@@ -12,8 +12,9 @@ class StateLogicTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->machine = new StateMachine(
-            // new StateGraph(TransitionMap::createArrayMap())
-            GameStatus::graph()
+            GameStatus::graph(),
+            true,
+            Game::class
         );
 
         $this->transitioner = new Transitioner(

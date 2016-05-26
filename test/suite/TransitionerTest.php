@@ -11,7 +11,9 @@ class TransitionerTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->machine = new StateMachine(
-            new StateGraph(TransitionMap::createArrayMap())
+            new StateGraph(TransitionMap::createArrayMap()),
+            false,
+            null
         );
 
         $this->subject = new Transitioner(

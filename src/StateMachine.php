@@ -5,21 +5,35 @@ declare (strict_types = 1); // @codeCoverageIgnore
 namespace Icecave\Transmute;
 
 use ArrayAccess;
-use SplObjectStorage;
 
 final class StateMachine implements ArrayAccess
 {
     /**
-     * @param StateGraph  $graph       The graph of state transitions.
-     * @param string|null $contextType The type of data object accepted by the state logic implementation.
+     * @param StateGraph  $graph         The graph of state transitions.
+     * @param bool        $useObjectKeys True to use object keys for state logic map.
+     * @param string|null $contextType   The type of data object accepted by the state logic implementation.
      */
-    public function __construct(StateGraph $graph, string $contextType = null)
-    {
+    public function __construct(
+        StateGraph $graph,
+        bool $useObjectKeys,
+        string $contextType = null
+    ) {
+        if ($useObjectKeys) {
+            $stateMap = StateMap::createObjectMap();
+        } else {
+            $stateMap = StateMap::createArrayMap();
+        }
+
         $this->graph = $graph;
-        $this->logic = new SplObjectStorage();  // TODO: change this to use the TransitionMap?
+        $this->logic = $stateMap;
         $this->contextType = $contextType;
     }
 
+    /**
+     * @param mixed $offset A state.
+     *
+     * @return mixed The state logic of the given state.
+     */
     public function offsetGet($offset)
     {
         assert($this->logic->contains($offset));
@@ -27,6 +41,11 @@ final class StateMachine implements ArrayAccess
         return $this->logic[$offset];
     }
 
+    /**
+     * @param mixed $offset A state.
+     *
+     * @return mixed The state logic of the given state.
+     */
     public function offsetExists($offset)
     {
         return $this->logic->contains($offset);
@@ -64,7 +83,7 @@ final class StateMachine implements ArrayAccess
      */
     public function update($currentState, $context)
     {
-        assert($this->contextType === null || $currentState instanceof $this->contextType);
+        assert($this->contextType === null || $context instanceof $this->contextType);
         assert($this->contextType !== null || $context === null);
 
         $transitioner = new Transitioner($this);
@@ -106,7 +125,7 @@ final class StateMachine implements ArrayAccess
     private $graph;
 
     /**
-     * @var SplObjectStorage<object, StateLogic> The logic implementations for each state.
+     * @var StateMap The logic implementations for each state.
      */
     private $logic;
 
