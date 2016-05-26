@@ -5,34 +5,44 @@ declare (strict_types = 1); // @codeCoverageIgnore
 namespace Icecave\Transmute;
 
 use PHPUnit_Framework_TestCase;
-// use SplObjectStorage;
 
 class StateGraphTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->graph = TransitionMap::createArrayMap();
+        $this->subject = GameStatus::graph();
+    }
 
-        $this->subject = new StateGraph(
-            $this->graph
+    public function testContains()
+    {
+        $this->assertTrue(
+            $this->subject->contains(GameStatus::LIVE())
+        );
+
+        $this->assertFalse(
+            $this->subject->contains(GameStatus::DELAYED())
         );
     }
 
-    public function testPlaceholder()
+    public function testIsInitialState()
     {
-        $this->markTestIncomplete();
+        $this->assertTrue(
+            $this->subject->isInitialState(StateGraphWildcard::instance())
+        );
     }
 
-    // public function testContains()
-    // {
-    //     $this->assertFalse(
-    //         $this->subject->contains('foo')
-    //     );
+    public function testIsTerminalState()
+    {
+        $this->assertTrue(
+            $this->subject->isTerminalState(GameStatus::FINISHED())
+        );
+    }
 
-    //     $this->graph['foo'] = 'bar';
-
-    //     $this->assertTrue(
-    //         $this->subject->contains('foo')
-    //     );
-    // }
+    public function testFindStateByTransition()
+    {
+        $this->assertSame(
+            GameStatus::FINISHED(),
+            $this->subject->findStateByTransition(GameStatus::FINISHING(), 'finalize')
+        );
+    }
 }

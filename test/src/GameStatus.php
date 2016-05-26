@@ -6,11 +6,15 @@ namespace Icecave\Transmute;
 
 use Eloquent\Enumeration\AbstractEnumeration;
 
+/**
+ * An example enumeration and state graph.
+ */
 class GameStatus extends AbstractEnumeration
 {
     const CREATED     = 'created';
     const PENDING     = 'pending';
     const REGISTERING = 'registering';
+    const DELAYED     = 'delayed';
     const LIVE        = 'live';
     const FINISHING   = 'finishing';
     const FINISHED    = 'finished';
@@ -21,7 +25,6 @@ class GameStatus extends AbstractEnumeration
     {
         return StateGraphBuilder::create(true)
             ->cancel(self::CANCELLING())
-            ->delete(self::DELETED())
 
         [self::PENDING()]
             ->open(self::REGISTERING())
@@ -31,6 +34,12 @@ class GameStatus extends AbstractEnumeration
             ->start(self::LIVE())
 
         [self::LIVE()]
+            ->finish(self::FINISHING())
+
+        [self::FINISHING()]
+            ->finalize(self::FINISHED())
+
+        [self::FINISHED()]
             ->finish(self::FINISHED())
 
         [self::CANCELLING()]

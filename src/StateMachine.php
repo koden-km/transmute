@@ -64,7 +64,7 @@ final class StateMachine implements ArrayAccess
      */
     public function update($currentState, $context)
     {
-        assert($this->contextType === null || $object instanceof $this->contextType);
+        assert($this->contextType === null || $currentState instanceof $this->contextType);
         assert($this->contextType !== null || $context === null);
 
         $transitioner = new Transitioner($this);

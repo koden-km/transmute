@@ -1,0 +1,69 @@
+<?php
+
+declare (strict_types = 1); // @codeCoverageIgnore
+
+namespace Icecave\Transmute;
+
+/**
+ * An example state logic class.
+ */
+final class GameLiveLogic implements StateLogic
+{
+    /**
+     * The update logic to be done during an update.
+     *
+     * @param Transitioner $transitioner The state transitioner.
+     * @param mixed        $context      The object having state updated.
+     */
+    public function update(Transitioner $transitioner, $context)
+    {
+        // To some updating LIVE state logic work ...
+
+        $context->setValue(
+            sprintf(
+                'update: current=%s',
+                $context->currentState()->key()
+            )
+        );
+    }
+
+    /**
+     * Any logic to be performed when entering this state.
+     *
+     * @param Transitioner $transitioner  The state transitioner.
+     * @param mixed        $previousState The previous state transitioned from.
+     * @param mixed        $context       The object being state transitioned.
+     */
+    public function enter(Transitioner $transitioner, $previousState, $context)
+    {
+        // To some entering LIVE state logic work ...
+
+        $context->setValue(
+            sprintf(
+                'enter: current=%s, previous=%s',
+                $context->currentState()->key(),
+                $previousState->key()
+            )
+        );
+    }
+
+    /**
+     * Any logic to be performed when leaving this state.
+     *
+     * @param Transitioner $transitioner The state transitioner.
+     * @param mixed        $nextState    The next state transitioning to.
+     * @param mixed        $context      The object being state transitioned.
+     */
+    public function leave(Transitioner $transitioner, $nextState, $context)
+    {
+        // To some leaving LIVE state logic work ...
+
+        $context->setValue(
+            sprintf(
+                'leave: current=%s, next=%s',
+                $context->currentState()->key(),
+                $nextState->key()
+            )
+        );
+    }
+}

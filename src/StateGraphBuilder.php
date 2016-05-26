@@ -82,7 +82,7 @@ final class StateGraphBuilder implements ArrayAccess
     {
         try {
             return new StateGraph($this->graph);
-        } finally {
+        } finally { // @codeCoverageIgnore
             $this->reset($this->graph->isUsingObjectKeys());
         }
     }
@@ -111,7 +111,7 @@ final class StateGraphBuilder implements ArrayAccess
         } else {
             $this->graph = TransitionMap::createArrayMap();
         }
-        $this->currentState = StateGraphWildcard::instance();
+        $this->currentState = $this->graph->wildcard();
     }
 
     /**

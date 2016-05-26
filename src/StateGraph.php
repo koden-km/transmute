@@ -33,7 +33,7 @@ final class StateGraph
     {
         assert(isset($this->graph[$currentState]));
 
-        return $currentState === StateGraphWildcard::instance();
+        return $currentState === $this->graph->wildcard();
     }
 
     /**
@@ -45,10 +45,19 @@ final class StateGraph
     {
         assert(isset($this->graph[$currentState]));
 
-        return empty($this->graph[$currentState]);
+        // If any transition is not to the same state as current then its not terminal.
+        $transitions = $this->graph[$currentState];
+        foreach ($transitions as $name => $nextState) {
+            if ($currentState !== $nextState) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
+     * @param mixed  $currentState   The current state.
      * @param string $transitionName The name of the available transition.
      *
      * @return mixed The state after transition.

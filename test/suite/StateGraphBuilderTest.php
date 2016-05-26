@@ -37,7 +37,7 @@ class StateGraphBuilderTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function testCallDoesCreateStateTransition()
+    public function testCallCreatesStateTransitionsWithObjectMap()
     {
         $this->subject->waiting(GameStatus::PENDING());
         $this->subject[GameStatus::PENDING()]->starting(GameStatus::LIVE());
@@ -46,12 +46,76 @@ class StateGraphBuilderTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($graph->contains(StateGraphWildcard::instance()));
         $this->assertTrue($graph->contains(GameStatus::PENDING()));
+    }
 
-        // TODO: Due to SplObjectStorage, i can't use string or in keys for states.
-        // Changing to a generic TransitionMap object.
-        //
-        // $this->assertTrue($graph->contains('starting'));
-        // $this->assertTrue($graph->contains('bar'));
-        // $this->assertTrue($graph->contains('jazz'));
+    public function testCallCreatesStateTransitionsWithArrayMap()
+    {
+        $this->subject = StateGraphBuilder::create(false);
+
+        $this->subject->waiting('pending');
+        $this->subject['pending']->starting('live');
+
+        $graph = $this->subject->build();
+
+        $this->assertTrue($graph->contains('*'));
+        $this->assertTrue($graph->contains('pending'));
+    }
+
+    public function testCallAddsMoreStateTransitionsWithObjectMap()
+    {
+        $this->subject[GameStatus::PENDING()]->starting(GameStatus::LIVE());
+        $this->subject[GameStatus::PENDING()]->cancelled(GameStatus::CANCELLING());
+
+        $graph = $this->subject->build();
+
+        $this->assertTrue($graph->contains(GameStatus::PENDING()));
+    }
+
+    public function testCallAddsMoreStateTransitionsWithArrayMap()
+    {
+        $this->subject = StateGraphBuilder::create(false);
+
+        $this->subject['pending']->starting('live');
+        $this->subject['pending']->cancelled('cancelling');
+
+        $graph = $this->subject->build();
+
+        $this->assertTrue($graph->contains('pending'));
+    }
+
+    public function testBuildWithObjectMap()
+    {
+        $this->subject->someTransition(GameStatus::PENDING());
+        $this->subject[GameStatus::PENDING()]->starting(GameStatus::LIVE());
+
+        $graph = $this->subject->build();
+
+        $this->assertTrue($graph->contains(StateGraphWildcard::instance()));
+        $this->assertTrue($graph->contains(GameStatus::PENDING()));
+
+        // Call build again, this time it should be empty.
+        $graph = $this->subject->build();
+
+        $this->assertFalse($graph->contains(StateGraphWildcard::instance()));
+        $this->assertFalse($graph->contains(GameStatus::PENDING()));
+    }
+
+    public function testBuildWithArrayMap()
+    {
+        $this->subject = StateGraphBuilder::create(false);
+
+        $this->subject->someTransition('pending');
+        $this->subject['pending']->starting('live');
+
+        $graph = $this->subject->build();
+
+        $this->assertTrue($graph->contains('*'));
+        $this->assertTrue($graph->contains('pending'));
+
+        // Call build again, this time it should be empty.
+        $graph = $this->subject->build();
+
+        $this->assertFalse($graph->contains('*'));
+        $this->assertFalse($graph->contains('pending'));
     }
 }

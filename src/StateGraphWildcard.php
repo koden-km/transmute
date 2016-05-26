@@ -4,6 +4,9 @@ declare (strict_types = 1); // @codeCoverageIgnore
 
 namespace Icecave\Transmute;
 
+/**
+ * An object to use as a wildcard for object key based transition maps.
+ */
 final class StateGraphWildcard
 {
     /**

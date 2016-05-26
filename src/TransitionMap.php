@@ -14,11 +14,13 @@ final class TransitionMap implements ArrayAccess
      *
      * Use this for int/string based states.
      *
+     * @param int|string $wildcard The wildcard type for this map.
+     *
      * @return TransitionMap
      */
-    public static function createArrayMap(): self
+    public static function createArrayMap($wildcard = '*'): self
     {
-        return new self([]);
+        return new self([], $wildcard);
     }
 
     /**
@@ -26,11 +28,17 @@ final class TransitionMap implements ArrayAccess
      *
      * Use this for object based states.
      *
+     * @param object $wildcard The wildcard type for this map.
+     *
      * @return TransitionMap
      */
-    public static function createObjectMap(): self
+    public static function createObjectMap(object $wildcard = null): self
     {
-        return new self(new SplObjectStorage());
+        if (null === $wildcard) {
+            $wildcard = StateGraphWildcard::instance();
+        }
+
+        return new self(new SplObjectStorage(), $wildcard);
     }
 
     /**
@@ -56,11 +64,7 @@ final class TransitionMap implements ArrayAccess
      */
     public function contains($key): bool
     {
-        // if ($this->isUsingArrayKeys()) {
-            return isset($this->map[$key]);
-        // } else {
-        //     return $this->map->contains($key);
-        // }
+        return isset($this->map[$key]);
     }
 
     /**
@@ -99,19 +103,40 @@ final class TransitionMap implements ArrayAccess
      */
     public function offsetUnset($offset)
     {
-        $this->map->offsetUnset($offset);
+        assert($this->contains($offset));
+
+        if ($this->isUsingArrayKeys()) {
+            unset($this->map[$offset]);
+        } else {
+            $this->map->offsetUnset($offset);
+        }
     }
 
     /**
-     * @param mixed The map storage to use.
+     * @return int|string|object The wildcard instance.
      */
-    private function __construct($map)
+    public function wildcard()
+    {
+        return $this->wildcard;
+    }
+
+    /**
+     * @param mixed             $map      The map storage to use.
+     * @param int|string|object $wildcard The wildcard instance.
+     */
+    private function __construct($map, $wildcard)
     {
         $this->map = $map;
+        $this->wildcard = $wildcard;
     }
 
     /**
-     * @var array<mixed, array<string, mixed>> The map of key to array of name based transitions.
+     * @var map<mixed, array<string, mixed>> The map of key to array of name based transitions.
      */
     private $map;
+
+    /**
+     * @var int|string|object The wildcard instance.
+     */
+    private $wildcard;
 }
