@@ -59,7 +59,7 @@ final class StateMachine implements ArrayAccess
      */
     public function offsetSet($offset, $value)
     {
-        assert($this->logic->contains($offset));
+        assert(!$this->logic->contains($offset));
 
         $this->logic[$offset] = $value;
     }
@@ -102,7 +102,7 @@ final class StateMachine implements ArrayAccess
             try {
                 $nextState = $this->graph->findStateByTransition(
                     $currentState,
-                    $transitionName
+                    $transitioner->nextTransition
                 );
             } finally {
                 $transitioner->nextTransition = null;

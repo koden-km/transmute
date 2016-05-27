@@ -7,7 +7,7 @@ namespace Icecave\Transmute;
 /**
  * An example state logic class.
  */
-final class GameLiveLogic implements StateLogic
+final class GameFinishedLogic implements StateLogic
 {
     /**
      * The update logic to be done during an update.
@@ -17,7 +17,7 @@ final class GameLiveLogic implements StateLogic
      */
     public function update(Transitioner $transitioner, $context)
     {
-        // To some updating LIVE state logic work ...
+        // To some updating FINISHED state logic work ...
 
         $context->setValue(
             sprintf(
@@ -36,9 +36,9 @@ final class GameLiveLogic implements StateLogic
      */
     public function enter(Transitioner $transitioner, $previousState, $context)
     {
-        // To some entering LIVE state logic work ...
+        // To some entering FINISHED state logic work ...
 
-        $context->setState(GameStatus::LIVE());
+        $context->setState(GameStatus::FINISHED());
 
         $context->setValue(
             sprintf(
@@ -58,7 +58,7 @@ final class GameLiveLogic implements StateLogic
      */
     public function leave(Transitioner $transitioner, $nextState, $context)
     {
-        // To some leaving LIVE state logic work ...
+        // To some leaving FINISHED state logic work ...
 
         $context->setValue(
             sprintf(

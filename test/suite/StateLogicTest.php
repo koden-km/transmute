@@ -24,7 +24,7 @@ class StateLogicTest extends PHPUnit_Framework_TestCase
         $this->subject = new GameLiveLogic();
 
         $this->game = new Game();
-        $this->game->setCurrentState(GameStatus::LIVE());
+        $this->game->setState(GameStatus::LIVE());
     }
 
     public function testUpdate()
@@ -39,12 +39,11 @@ class StateLogicTest extends PHPUnit_Framework_TestCase
 
     public function testEnter()
     {
-        $game = new Game();
-        $game->setCurrentState(GameStatus::LIVE());
+        $this->game->setState(GameStatus::PENDING());
 
         $this->subject->enter(
             $this->transitioner,
-            GameStatus::PENDING(),
+            $this->game->state(),
             $this->game
         );
 

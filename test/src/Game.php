@@ -13,14 +13,16 @@ final class Game
     {
         $this->state = GameStatus::CREATED();
         $this->value = 'default';
+        $this->log = [];
+        $this->completeFlag = false;
     }
 
-    public function currentState(): GameStatus
+    public function state(): GameStatus
     {
         return $this->state;
     }
 
-    public function setCurrentState(GameStatus $newState) 
+    public function setState(GameStatus $newState)
     {
         $this->state = $newState;
     }
@@ -30,11 +32,29 @@ final class Game
         return $this->value;
     }
 
-    public function setValue(string $value) 
+    public function setValue(string $value)
     {
         $this->value = $value;
+        $this->log[] = $value;
+    }
+
+    public function log(): array
+    {
+        return $this->log;
+    }
+
+    public function completeFlag(): bool
+    {
+        return $this->completeFlag;
+    }
+
+    public function setCompleteFlag(bool $completeFlag)
+    {
+        $this->completeFlag = $completeFlag;
     }
 
     private $state;
     private $value;
+    private $log;
+    private $completeFlag;
 }
